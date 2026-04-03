@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PulseRoute - Predictive Payment Routing</title>
+  <meta name="description" content="PulseRoute detects payment processor failures before they hit your revenue. Smart routing, predictive failover, zero dropped transactions.">
+  <style>
+    :root {
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --bg: #0f172a;
+      --surface: #1e293b;
+      --text: #f1f5f9;
+      --text-muted: #94a3b8;
+      --accent: #22d3ee;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+
+    /* Nav */
+    nav {
+      padding: 20px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    nav .container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .logo {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--text);
+      text-decoration: none;
+    }
+    .logo span { color: var(--accent); }
+    nav a {
+      color: var(--text-muted);
+      text-decoration: none;
+      margin-left: 32px;
+      font-size: 0.95rem;
+    }
+    nav a:hover { color: var(--text); }
+
+    /* Hero */
+    .hero {
+      padding: 100px 0 80px;
+      text-align: center;
+    }
+    .hero h1 {
+      font-size: 3.2rem;
+      font-weight: 800;
+      line-height: 1.15;
+      margin-bottom: 24px;
+      max-width: 800px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .hero h1 em {
+      font-style: normal;
+      color: var(--accent);
+    }
+    .hero p {
+      font-size: 1.25rem;
+      color: var(--text-muted);
+      max-width: 600px;
+      margin: 0 auto 40px;
+    }
+    .cta-group { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+    .btn {
+      display: inline-block;
+      padding: 14px 32px;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s;
+      cursor: pointer;
+      border: none;
+    }
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+    .btn-primary:hover { background: var(--primary-dark); transform: translateY(-1px); }
+    .btn-secondary {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid rgba(255,255,255,0.15);
+    }
+    .btn-secondary:hover { border-color: rgba(255,255,255,0.3); }
+
+    /* Stats bar */
+    .stats-bar {
+      display: flex;
+      justify-content: center;
+      gap: 48px;
+      padding: 48px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      flex-wrap: wrap;
+    }
+    .stat { text-align: center; }
+    .stat-value {
+      font-size: 2.4rem;
+      font-weight: 800;
+      color: var(--accent);
+    }
+    .stat-label {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    /* Problem/Solution */
+    .section { padding: 80px 0; }
+    .section-header {
+      text-align: center;
+      margin-bottom: 56px;
+    }
+    .section-header h2 {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+    .section-header p {
+      color: var(--text-muted);
+      font-size: 1.1rem;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* Features grid */
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 32px;
+    }
+    .feature {
+      background: var(--surface);
+      border-radius: 12px;
+      padding: 32px;
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+    .feature-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      margin-bottom: 16px;
+    }
+    .feature-icon.blue { background: rgba(37,99,235,0.15); color: var(--primary); }
+    .feature-icon.green { background: rgba(16,185,129,0.15); color: var(--success); }
+    .feature-icon.yellow { background: rgba(245,158,11,0.15); color: var(--warning); }
+    .feature-icon.red { background: rgba(239,68,68,0.15); color: var(--danger); }
+    .feature-icon.cyan { background: rgba(34,211,238,0.15); color: var(--accent); }
+    .feature h3 {
+      font-size: 1.15rem;
+      margin-bottom: 8px;
+    }
+    .feature p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    /* How it works */
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 32px;
+      counter-reset: step;
+    }
+    .step {
+      text-align: center;
+      position: relative;
+    }
+    .step::before {
+      counter-increment: step;
+      content: counter(step);
+      display: block;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: white;
+      font-weight: 700;
+      line-height: 40px;
+      margin: 0 auto 16px;
+    }
+    .step h3 { font-size: 1.05rem; margin-bottom: 8px; }
+    .step p { color: var(--text-muted); font-size: 0.9rem; }
+
+    /* Comparison */
+    .comparison {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .comparison-col {
+      background: var(--surface);
+      border-radius: 12px;
+      padding: 32px;
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+    .comparison-col h3 {
+      margin-bottom: 16px;
+      font-size: 1.1rem;
+    }
+    .comparison-col.before h3 { color: var(--danger); }
+    .comparison-col.after h3 { color: var(--success); }
+    .comparison-col ul {
+      list-style: none;
+      padding: 0;
+    }
+    .comparison-col li {
+      padding: 8px 0;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+    }
+    .comparison-col li:last-child { border-bottom: none; }
+
+    /* CTA */
+    .cta-section {
+      text-align: center;
+      padding: 80px 0;
+      border-top: 1px solid rgba(255,255,255,0.06);
+    }
+    .cta-section h2 {
+      font-size: 2rem;
+      margin-bottom: 16px;
+    }
+    .cta-section p {
+      color: var(--text-muted);
+      margin-bottom: 32px;
+      font-size: 1.1rem;
+    }
+
+    /* Request access form */
+    .access-form {
+      max-width: 480px;
+      margin: 0 auto;
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .access-form input {
+      flex: 1;
+      min-width: 200px;
+      padding: 14px 16px;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.15);
+      background: var(--surface);
+      color: var(--text);
+      font-size: 1rem;
+    }
+    .access-form input::placeholder { color: var(--text-muted); }
+    .access-form input:focus { outline: none; border-color: var(--primary); }
+    .form-success {
+      display: none;
+      color: var(--success);
+      font-weight: 600;
+      padding: 14px;
+    }
+
+    /* Footer */
+    footer {
+      padding: 40px 0;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+    footer a { color: var(--text-muted); text-decoration: none; margin: 0 16px; }
+    footer a:hover { color: var(--text); }
+
+    @media (max-width: 768px) {
+      .hero h1 { font-size: 2.2rem; }
+      .stats-bar { gap: 24px; }
+      .comparison { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="container">
+    <a href="/" class="logo">Pulse<span>Route</span></a>
+    <div>
+      <a href="#features">Features</a>
+      <a href="#how-it-works">How It Works</a>
+      <a href="https://docs.pulseroute.dev" target="_blank">Docs</a>
+      <a href="#request-access" class="btn btn-primary" style="padding:10px 24px;margin-left:16px;">Request Access</a>
+    </div>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="container">
+    <h1>Stop losing revenue to <em>payment processor failures</em></h1>
+    <p>PulseRoute detects processor degradation before it hits your bottom line. Smart routing, predictive failover, zero code changes.</p>
+    <div class="cta-group">
+      <a href="#request-access" class="btn btn-primary">Request Early Access</a>
+      <a href="#how-it-works" class="btn btn-secondary">See How It Works</a>
+    </div>
+  </div>
+</section>
+
+<div class="stats-bar">
+  <div class="stat">
+    <div class="stat-value">&lt;200ms</div>
+    <div class="stat-label">Failover detection</div>
+  </div>
+  <div class="stat">
+    <div class="stat-value">99.9%</div>
+    <div class="stat-label">Routing uptime</div>
+  </div>
+  <div class="stat">
+    <div class="stat-value">3 lines</div>
+    <div class="stat-label">SDK integration</div>
+  </div>
+  <div class="stat">
+    <div class="stat-value">$0</div>
+    <div class="stat-label">Until you see value</div>
+  </div>
+</div>
+
+<section class="section" id="problem">
+  <div class="container">
+    <div class="comparison">
+      <div class="comparison-col before">
+        <h3>Without PulseRoute</h3>
+        <ul>
+          <li>Processor goes down, you find out from angry customers</li>
+          <li>Manual failover takes 15-30 minutes</li>
+          <li>Every failed transaction is lost revenue</li>
+          <li>No visibility into processor health trends</li>
+          <li>Static routing rules can't adapt to real-time conditions</li>
+        </ul>
+      </div>
+      <div class="comparison-col after">
+        <h3>With PulseRoute</h3>
+        <ul>
+          <li>Degradation detected in seconds, automatically</li>
+          <li>Traffic shifts to healthy processor instantly</li>
+          <li>Transactions rescued before customers notice</li>
+          <li>Real-time health dashboard with predictive alerts</li>
+          <li>ML-powered routing optimizes success rates continuously</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="features">
+  <div class="container">
+    <div class="section-header">
+      <h2>Built for payment teams</h2>
+      <p>Everything you need to make your payment stack resilient, without rebuilding your integration.</p>
+    </div>
+    <div class="features">
+      <div class="feature">
+        <div class="feature-icon blue">&#9881;</div>
+        <h3>Real-Time Health Monitoring</h3>
+        <p>Continuous evaluation of processor success rates, latency percentiles, and error patterns. Know exactly how each processor is performing.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon green">&#9889;</div>
+        <h3>Automatic Failover</h3>
+        <p>When a processor degrades, traffic shifts to healthy alternatives automatically. No pager, no manual intervention, no lost transactions.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon cyan">&#9733;</div>
+        <h3>Predictive Routing (LSTM)</h3>
+        <p>ML model predicts processor failures before they happen. Pre-emptive routing changes prevent outages instead of reacting to them.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon yellow">&#9878;</div>
+        <h3>Adaptive Optimization (MAB)</h3>
+        <p>Thompson Sampling continuously optimizes traffic allocation across processors based on real-time success rates and latency.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon red">&#128064;</div>
+        <h3>Shadow Mode</h3>
+        <p>Run PulseRoute alongside your current setup without changing routing. See exactly what it would have done differently with a comparison report.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon blue">&#128268;</div>
+        <h3>Zero-Change Integration</h3>
+        <p>3-line SDK integration. Report outcomes, get routing decisions. Works with Stripe, Adyen, Braintree, Checkout.com, and any processor.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="how-it-works">
+  <div class="container">
+    <div class="section-header">
+      <h2>Live in 15 minutes</h2>
+      <p>From zero to intelligent payment routing.</p>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <h3>Add Your Processors</h3>
+        <p>Tell PulseRoute which processors you use and what they handle (countries, currencies, payment methods).</p>
+      </div>
+      <div class="step">
+        <h3>Install the SDK</h3>
+        <p>3 lines of code: initialize, get route before payment, report outcome after. Node.js, Python, Java, or REST API.</p>
+      </div>
+      <div class="step">
+        <h3>Start in Shadow Mode</h3>
+        <p>PulseRoute observes your traffic without changing routing. After a few hours, check the shadow report to see impact.</p>
+      </div>
+      <div class="step">
+        <h3>Go Live</h3>
+        <p>Switch from shadow to active mode. PulseRoute now handles routing decisions, failover, and optimization automatically.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-section" id="request-access">
+  <div class="container">
+    <h2>Join the early access program</h2>
+    <p>We're onboarding design partners now. Free during beta, usage-based pricing after.</p>
+    <div class="access-form" id="accessForm">
+      <input type="email" id="emailInput" placeholder="you@company.com" required>
+      <button type="button" class="btn btn-primary" onclick="submitAccess()">Request Access</button>
+    </div>
+    <div class="form-success" id="formSuccess">
+      Thanks! We'll be in touch within 24 hours.
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <p>
+      <a href="/terms.html">Terms of Service</a>
+      <a href="/privacy.html">Privacy Policy</a>
+      <a href="https://docs.pulseroute.dev">Documentation</a>
+      <a href="https://status.pulseroute.dev">Status</a>
+    </p>
+    <p style="margin-top:16px;">PulseRoute &copy; 2026. All rights reserved.</p>
+  </div>
+</footer>
+
+<script>
+function submitAccess() {
+  const email = document.getElementById('emailInput').value;
+  if (!email || !email.includes('@')) return;
+
+  // Store locally for now - replace with actual API endpoint
+  console.log('Access request:', email);
+
+  document.getElementById('accessForm').style.display = 'none';
+  document.getElementById('formSuccess').style.display = 'block';
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Privacy Policy - PulseRoute</title>
+  <style>
+    :root { --bg: #0f172a; --surface: #1e293b; --text: #f1f5f9; --text-muted: #94a3b8; --accent: #22d3ee; --primary: #2563eb; }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: var(--bg); color: var(--text); line-height: 1.8; }
+    .container { max-width: 760px; margin: 0 auto; padding: 60px 24px; }
+    nav { padding: 20px 0; border-bottom: 1px solid rgba(255,255,255,0.06); }
+    nav .nav-inner { max-width: 760px; margin: 0 auto; padding: 0 24px; }
+    nav a { color: var(--text); text-decoration: none; font-size: 1.4rem; font-weight: 700; }
+    nav a span { color: var(--accent); }
+    h1 { font-size: 2rem; margin-bottom: 8px; }
+    .updated { color: var(--text-muted); margin-bottom: 40px; font-size: 0.9rem; }
+    h2 { font-size: 1.3rem; margin: 32px 0 12px; color: var(--accent); }
+    h3 { font-size: 1.1rem; margin: 20px 0 8px; }
+    p, li { color: var(--text-muted); margin-bottom: 12px; }
+    ul { padding-left: 24px; }
+    table { width: 100%; border-collapse: collapse; margin: 16px 0; }
+    th, td { padding: 10px 12px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.06); color: var(--text-muted); font-size: 0.9rem; }
+    th { color: var(--text); font-weight: 600; }
+    a { color: var(--primary); }
+    .highlight { background: var(--surface); border-radius: 8px; padding: 20px; margin: 16px 0; border: 1px solid rgba(255,255,255,0.06); }
+    footer { text-align: center; padding: 40px 0; color: var(--text-muted); font-size: 0.85rem; border-top: 1px solid rgba(255,255,255,0.06); margin-top: 40px; }
+  </style>
+</head>
+<body>
+
+<nav><div class="nav-inner"><a href="/">Pulse<span>Route</span></a></div></nav>
+
+<div class="container">
+  <h1>Privacy Policy</h1>
+  <p class="updated">Last updated: April 2, 2026</p>
+
+  <div class="highlight">
+    <strong>The short version:</strong> PulseRoute processes only transaction routing metadata (processor IDs, success/failure, latency). We never see, store, or process cardholder data, payment amounts, or personally identifiable customer information.
+  </div>
+
+  <h2>1. What Data We Collect</h2>
+
+  <h3>Transaction Metadata (from your SDK integration)</h3>
+  <table>
+    <tr><th>Data</th><th>Example</th><th>Purpose</th></tr>
+    <tr><td>Processor ID</td><td>"stripe", "adyen"</td><td>Route health evaluation</td></tr>
+    <tr><td>Transaction result</td><td>success / failure</td><td>Success rate calculation</td></tr>
+    <tr><td>Latency</td><td>145ms</td><td>Performance monitoring</td></tr>
+    <tr><td>Error code</td><td>"timeout", "declined"</td><td>Failure pattern analysis</td></tr>
+    <tr><td>Routing context</td><td>country, currency, payment method</td><td>Rule matching</td></tr>
+    <tr><td>Rule ID</td><td>"us_usd_visa"</td><td>Configuration reference</td></tr>
+  </table>
+
+  <h3>Account Information</h3>
+  <ul>
+    <li>Email address (for account access and communication)</li>
+    <li>Company name</li>
+    <li>API keys (hashed, for authentication)</li>
+  </ul>
+
+  <h3>What We Do NOT Collect</h3>
+  <ul>
+    <li>Credit/debit card numbers or PANs</li>
+    <li>Cardholder names or addresses</li>
+    <li>Transaction amounts or order details</li>
+    <li>Customer PII (names, emails, phone numbers)</li>
+    <li>IP addresses of your end customers</li>
+  </ul>
+
+  <h2>2. How We Use Your Data</h2>
+  <ul>
+    <li><strong>Health evaluation:</strong> Computing processor success rates, latency percentiles, and failure patterns</li>
+    <li><strong>Routing decisions:</strong> Determining which processor to recommend for each transaction context</li>
+    <li><strong>Predictive models:</strong> Training ML models to predict processor degradation (Tier 2/3)</li>
+    <li><strong>Shadow reports:</strong> Comparing PulseRoute recommendations against actual routing for shadow mode</li>
+    <li><strong>Service improvement:</strong> Aggregate, anonymized metrics to improve the routing engine</li>
+  </ul>
+
+  <h2>3. Data Storage and Retention</h2>
+  <ul>
+    <li>Transaction metadata is stored in Redis with a configurable time window (default: 5 minutes for real-time metrics)</li>
+    <li>Aggregated health statistics are retained for the duration of your account</li>
+    <li>Shadow mode observations are stored in-memory and cleared on engine restart or explicit clear</li>
+    <li>All data is deleted within 30 days of account termination</li>
+  </ul>
+
+  <h2>4. Data Isolation</h2>
+  <p>PulseRoute is multi-tenant with strict data isolation. Each tenant's data is stored in a separate Redis key namespace. There is no cross-tenant data access. Your data is never shared with other customers.</p>
+
+  <h2>5. Data Security</h2>
+  <ul>
+    <li>All API communication is encrypted via TLS</li>
+    <li>API keys are transmitted via headers, never in URLs</li>
+    <li>Redis data is encrypted at rest (when using managed Redis services)</li>
+    <li>Access to production systems is restricted and logged</li>
+  </ul>
+
+  <h2>6. Third-Party Data Sharing</h2>
+  <p>We do not sell, rent, or share your data with third parties. We may share aggregate, anonymized statistics (e.g., "average failover detection time across all customers") for marketing purposes, but never individual customer data.</p>
+
+  <h2>7. PCI-DSS Compliance</h2>
+  <p>PulseRoute is designed to operate outside the PCI-DSS cardholder data environment (CDE). We do not process, store, or transmit cardholder data. Our SDK integration points are positioned around your payment flow, not within it.</p>
+
+  <h2>8. Your Rights</h2>
+  <ul>
+    <li><strong>Access:</strong> Request a copy of all data we hold about your account</li>
+    <li><strong>Deletion:</strong> Request deletion of your account and all associated data</li>
+    <li><strong>Portability:</strong> Export your configuration (rules, processor setup) at any time via the API</li>
+    <li><strong>Correction:</strong> Update your account information at any time</li>
+  </ul>
+
+  <h2>9. Cookies</h2>
+  <p>The PulseRoute dashboard uses essential cookies for session management only. We do not use tracking cookies, analytics scripts, or advertising pixels.</p>
+
+  <h2>10. Changes to This Policy</h2>
+  <p>We will notify you of material changes via email. The "last updated" date at the top reflects when this policy was last modified.</p>
+
+  <h2>11. Contact</h2>
+  <p>For privacy-related questions or data requests: <a href="mailto:privacy@pulseroute.dev">privacy@pulseroute.dev</a></p>
+</div>
+
+<footer>PulseRoute &copy; 2026. All rights reserved.</footer>
+
+</body>
+</html>
